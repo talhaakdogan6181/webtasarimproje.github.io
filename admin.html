@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Paneli - Alışveriş Sitesi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f7faf9;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 70px;
+            color: #344d4d;
+        }
+
+        .navbar {
+            background-color: #50c7b7;
+            box-shadow: 0 4px 15px rgba(80, 199, 183, 0.4);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #fff !important;
+            letter-spacing: 1.3px;
+            font-size: 1.5rem;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ddd;
+        }
+
+            body.dark-mode .navbar {
+                background-color: #222;
+                box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+            }
+
+            body.dark-mode table {
+                color: #ddd;
+            }
+
+            body.dark-mode .form-control,
+            body.dark-mode .form-select {
+                background-color: #1e1e1e;
+                color: #ddd;
+                border-color: #444;
+            }
+
+                body.dark-mode .form-control:focus,
+                body.dark-mode .form-select:focus {
+                    border-color: #50c7b7;
+                    box-shadow: 0 0 10px #50c7b7aa;
+                }
+
+            body.dark-mode .btn-primary {
+                background-color: #50c7b7;
+                border-color: #50c7b7;
+            }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar fixed-top navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="shop.html">Mağaza</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+                    aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Mağaza</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cart.html">Sepet</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="admin.html">Admin Paneli</a></li>
+                </ul>
+                <button id="darkModeToggle" class="btn btn-outline-light ms-3" title="Koyu/Açık Mod">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <h2>Admin Paneli - Ürün Yönetimi</h2>
+
+        <form id="productForm" class="row g-3 my-3">
+            <input type="hidden" id="productId" />
+            <div class="col-md-4">
+                <label for="productName" class="form-label">Ürün Adı</label>
+                <input type="text" class="form-control" id="productName" required />
+            </div>
+            <div class="col-md-3">
+                <label for="productCategory" class="form-label">Kategori</label>
+                <select class="form-select" id="productCategory" required>
+                    <option value="">Seçiniz...</option>
+                    <option value="Elektronik">Elektronik</option>
+                    <option value="Giyim">Giyim</option>
+                    <option value="Ev">Ev</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="productPrice" class="form-label">Fiyat (₺)</label>
+                <input type="number" class="form-control" id="productPrice" min="0" step="0.01" required />
+            </div>
+            <div class="col-md-3">
+                <label for="productImage" class="form-label">Resim URL</label>
+                <input type="url" class="form-control" id="productImage" required />
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary" id="submitBtn">Ürün Ekle</button>
+                <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display:none;">İptal</button>
+            </div>
+        </form>
+
+        <hr />
+
+        <h4>Ürün Listesi</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Ürün Adı</th>
+                        <th>Kategori</th>
+                        <th>Fiyat (₺)</th>
+                        <th>Resim</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        function applyDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌙';
+            }
+        }
+
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        applyDarkMode(isDarkMode);
+
+        darkModeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkMode', isDarkMode);
+            applyDarkMode(isDarkMode);
+        });
+
+        // Product management
+        const productForm = document.getElementById('productForm');
+        const productIdInput = document.getElementById('productId');
+        const productNameInput = document.getElementById('productName');
+        const productCategorySelect = document.getElementById('productCategory');
+        const productPriceInput = document.getElementById('productPrice');
+        const productImageInput = document.getElementById('productImage');
+        const productTableBody = document.getElementById('productTableBody');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+        const LS_PRODUCTS_KEY = 'products';
+
+        // Load products
+        function loadProducts() {
+            const data = localStorage.getItem(LS_PRODUCTS_KEY);
+            if (data) return JSON.parse(data);
+            return [];
+        }
+
+        // Save products
+        function saveProducts(products) {
+            localStorage.setItem(LS_PRODUCTS_KEY, JSON.stringify(products));
+        }
+
+        // Render product list
+        function renderProducts() {
+            const products = loadProducts();
+            productTableBody.innerHTML = '';
+            products.forEach(product => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td>${product.category}</td>
+                        <td>${product.price.toLocaleString('tr-TR')} ₺</td>
+                        <td><img src="${product.image}" alt="${product.name}" style="height: 50px; border-radius: 8px;" /></td>
+                        <td>
+                            <button class="btn btn-sm btn-warning edit-btn" data-id="${product.id}">Düzenle</button>
+                            <button class="btn btn-sm btn-danger delete-btn" data-id="${product.id}">Sil</button>
+                        </td>
+                    `;
+                productTableBody.appendChild(tr);
+            });
+        }
+
+        // Clear form
+        function clearForm() {
+            productIdInput.value = '';
+            productNameInput.value = '';
+            productCategorySelect.value = '';
+            productPriceInput.value = '';
+            productImageInput.value = '';
+            submitBtn.textContent = 'Ürün Ekle';
+            cancelEditBtn.style.display = 'none';
+        }
+
+        // Add/update product
+        productForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const products = loadProducts();
+
+            const id = productIdInput.value;
+            const name = productNameInput.value.trim();
+            const category = productCategorySelect.value;
+            const price = parseFloat(productPriceInput.value);
+            const image = productImageInput.value.trim();
+
+            if (!name || !category || isNaN(price) || !image) {
+                alert('Lütfen tüm alanları doldurun.');
+                return;
+            }
+
+            if (id) {
+                // Update
+                const index = products.findIndex(p => p.id === parseInt(id));
+                if (index > -1) {
+                    products[index] = { id: parseInt(id), name, category, price, image };
+                    alert('Ürün güncellendi!');
+                }
+            } else {
+                // Add new
+                const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                products.push({ id: newId, name, category, price, image });
+                alert('Yeni ürün eklendi!');
+            }
+
+            saveProducts(products);
+            renderProducts();
+            clearForm();
+        });
+
+        // Edit and delete buttons
+        productTableBody.addEventListener('click', e => {
+            if (e.target.classList.contains('edit-btn')) {
+                const id = parseInt(e.target.dataset.id);
+                const products = loadProducts();
+                const product = products.find(p => p.id === id);
+                if (product) {
+                    productIdInput.value = product.id;
+                    productNameInput.value = product.name;
+                    productCategorySelect.value = product.category;
+                    productPriceInput.value = product.price;
+                    productImageInput.value = product.image;
+                    submitBtn.textContent = 'Güncelle';
+                    cancelEditBtn.style.display = 'inline-block';
+                }
+            }
+            else if (e.target.classList.contains('delete-btn')) {
+                const id = parseInt(e.target.dataset.id);
+                if (confirm('Bu ürünü silmek istediğinize emin misiniz?')) {
+                    let products = loadProducts();
+                    products = products.filter(p => p.id !== id);
+                    saveProducts(products);
+                    renderProducts();
+                }
+            }
+        });
+
+        // Cancel edit
+        cancelEditBtn.addEventListener('click', () => {
+            clearForm();
+        });
+
+        // İlk yüklemede ürünleri göster
+        renderProducts();
+
+        // Admin paneli için parola fonksiyonu (isteğe bağlı)
+        function askAdminPassword() {
+            const password = prompt("Admin paneline erişmek için şifreyi girin:");
+            if (password === null) return; // iptal
+
+            const correctPassword = "12345";
+
+            if (password === correctPassword) {
+                alert("Şifre doğru! Admin paneline yönlendiriliyorsunuz.");
+                window.location.href = "admin.html";
+            } else {
+                alert("Yanlış şifre! Erişim engellendi.");
+            }
+        }
+    </script>
+</body>
+</html>

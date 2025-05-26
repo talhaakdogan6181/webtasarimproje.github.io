@@ -1,0 +1,185 @@
+﻿body {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    body.dark-mode {
+        background-color: #121212 !important;
+        color: #eee !important;
+    }
+
+        body.dark-mode .bg-light {
+            background-color: #222 !important;
+        }
+
+        body.dark-mode .bg-white {
+            background-color: #1e1e1e !important;
+            color: #ddd;
+        }
+
+        body.dark-mode .navbar {
+            background-color: #333 !important;
+        }
+
+        body.dark-mode .btn-outline-light {
+            color: #ddd;
+            border-color: #ddd;
+        }
+
+            body.dark-mode .btn-outline-light:hover {
+                background-color: #ddd;
+                color: #333;
+            }
+
+.card, .list-group-item {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .card, body.dark-mode .list-group-item {
+    background-color: #1c1c1c;
+    color: #ddd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    form {
+        min-width: 90vw !important;
+    }
+}
+.navbar {
+    height: 70px; /* Sabit yükseklik */
+    background-color: #50c7b7;
+    box-shadow: 0 4px 15px rgba(80, 199, 183, 0.4);
+    display: flex;
+    align-items: center; /* Dikey ortala */
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: #fff !important;
+    letter-spacing: 1.3px;
+    font-size: 1.7rem;
+    line-height: 70px; /* Navbar yüksekliğine göre */
+}
+
+.navbar .form-control,
+.navbar .form-select {
+    height: 42px;
+    border-radius: 12px;
+    padding: 0.4rem 1rem;
+}
+
+.navbar .btn-cart {
+    height: 42px;
+    padding: 0 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-toggler {
+    border: none;
+    font-size: 1.6rem;
+    color: white;
+    padding: 6px 10px;
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+    width: 30px;
+    height: 30px;
+}
+
+.cart-icon-wrapper {
+    font-size: 1.6rem;
+    position: relative;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    width: 42px;
+}
+
+#cartCount {
+    top: 6px;
+    right: 6px;
+    padding: 2px 7px;
+    font-size: 0.75rem;
+}
+.dropdown-toggle::after {
+    margin-left: 0.25rem;
+    vertical-align: 0.15em;
+}
+
+.navbar .dropdown-toggle {
+    color: white !important;
+    font-weight: 600;
+    user-select: none;
+}
+/* Koyu mod animasyonu */
+body, .navbar, .product-card, .dropdown-menu {
+    transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Dropdown menü koyu mod */
+.dark-mode .dropdown-menu {
+    background-color: #333 !important;
+    color: #ddd !important;
+}
+
+.dark-mode .dropdown-item {
+    color: #ddd !important;
+}
+
+    .dark-mode .dropdown-item:hover, .dark-mode .dropdown-item:focus {
+        background-color: #444 !important;
+        color: #fff !important;
+    }
+
+/* Navbar koyu mod renkler */
+.dark-mode .navbar {
+    background-color: #222 !important;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Ürün kart koyu mod renkler */
+.dark-mode .product-card {
+    background-color: #1e1e1e !important;
+    box-shadow: 0 6px 18px rgba(255, 255, 255, 0.1) !important;
+    color: #ddd !important;
+}
+
+/* Input, select koyu mod */
+.dark-mode .form-control, .dark-mode .form-select {
+    background-color: #333;
+    color: #ddd;
+    border-color: #555;
+}
+
+    .dark-mode .form-control:focus, .dark-mode .form-select:focus {
+        border-color: #50c7b7;
+        box-shadow: 0 0 10px #50c7b7aa;
+        outline: none;
+    }
+
+/* Sepet ikonu koyu mod */
+.dark-mode .cart-icon-wrapper {
+    color: #ddd !important;
+}
+
+/* Navbar brand koyu mod */
+.dark-mode .navbar-brand {
+    color: #50c7b7 !important;
+}
+
+/* Dark mode toggle ikon renk */
+.dark-mode #darkModeToggle:hover {
+    color: #a0f0e0 !important;
+}
