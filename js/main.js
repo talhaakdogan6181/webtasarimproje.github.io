@@ -334,4 +334,20 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts();
     updateCartCount();
 });
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+    if(password !== passwordConfirm) {
+        alert('Şifreler eşleşmiyor!');
+    return;
+    }
+
+    alert(`Kayıt başarılı! Email: ${email}`);
+});
+</script>
 
